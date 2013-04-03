@@ -21,26 +21,35 @@ module EmberKonacha
         validate_driver! 
       end
 
-      def add_gems
-        gem_group :development, :test do
-          gem "konacha"
-          gem js_driver
+      def add_gems        
+        ['konacha', js_driver, ].each do |gem_name|
+          gem gem_name, group: [:development, :test] unless has_gem? gem_name
         end
 
-        say "Note: You must install PhantomJS, f.ex using homebrew"
+        unless has_gem?('coffee-rails') || !coffee?
+          gem 'coffee-rails'
+        end
       end
 
       def create_infra_files
         infra_files.each do |name|
-          coffee_template name
-        end
+          begin
+            coffee_template name
+          rescue
+            js_template name
+          end            
+        end        
       end
 
       def create_vendor_files
-        vendor("assets/javascripts/sinon.js") do
+        return if has_sinon_file?
+
+        vendor(sinon_path) do
           get_remote_file :sinon, sinon_version
         end
-      rescue
+      rescue Exception => e
+        puts e.inspect
+        say e.message, :red
         say "Sinon URI access/download error! Using Sinon-1.6 supplied by the generator gem ;)"
         template 'sinon.js', 'vendor/assets/javascripts/sinon.js'
       end
@@ -71,7 +80,77 @@ module EmberKonacha
         copy_file 'spec/views/application/index.html.slim', 'app/views/application/index.html.slim'
       end
 
+
+      def post_install_notice
+        say nice(js_driver_notice) , :green
+      end
+
       protected
+
+      def nice text
+        border + text
+      end
+
+      def border width = 80
+        @border ||= "=" * width + "\n"
+      end
+
+      def coffee?
+        true
+      end
+
+      def has_sinon_file?
+        File.exist? sinon_file_path
+      end
+
+      def sinon_file_path
+        Rails.root.join('vendor', sinon_path)
+      end
+
+      def sinon_path
+        "assets/javascripts/sinon.js"
+      end
+
+      def js_driver_notice 
+        case js_driver.to_sym
+        when :poltergeist
+           %q{Note: poltergeist requires you have installed PhantomJS headless JS driver. 
+
+via Homebrew: 
+
+brew install phantomjs
+
+MacPorts: 
+
+sudo port install phantomjs
+
+See https://github.com/jonleighton/poltergeist
+}
+        else
+          %q{Note: Install a suitable Javascript driver for headless js testing.
+
+Google V8: 
+
+gem install therubyracer
+
+Mozilla Rhino (JRuby only) : 
+
+gem install therubyrhino
+}
+        end
+      end
+
+      def has_gem? name
+        gemfile_content =~ /gem\s+('|")#{name}/
+      end
+
+      def gemfile_content
+        @gemfile_content ||= gemfile.read
+      end
+
+      def gemfile
+        @gemfile ||= File.open Rails.root.join('Gemfile'), 'r'
+      end
 
       def sinon_version
         options[:sinon_version]
@@ -86,7 +165,7 @@ module EmberKonacha
       end
 
       def validate_driver! 
-        unless valid_driver?
+        unless valid_driver? js_driver
           raise "Invalid javascript driver #{js_driver}, must be one of: #{valid_drivers}"  
         end
       end
@@ -104,9 +183,9 @@ module EmberKonacha
       end
 
       def spec_template name
-        src_file = File.join 'specs/app', name
-        target_file = File.join 'app', name
-        template coffee_filename, coffee_target_file(name)
+        src_file = File.join 'specs/app', name.to_s
+        target_file = File.join 'app', name.to_s
+        template coffee_filename(src_file), coffee_target_file(target_file)      
       end
 
       def spec_files
@@ -114,8 +193,9 @@ module EmberKonacha
       end      
 
       def get_remote_file name, version = nil    
-        url = version_it remote_uri(name.to_sym), version
+        url = version_it remote_uri[name.to_sym], version
         uri = URI url
+        puts "uri: #{uri}"
         Net::HTTP.get uri
       end
 
@@ -131,7 +211,7 @@ module EmberKonacha
       end
 
       def infra_files
-        [:spec_helper, :konacha_config]
+        [:spec_helper, :konacha_config, :sinon_mvc_mocks]
       end
 
       def coffee_template name
@@ -143,15 +223,15 @@ module EmberKonacha
       end
 
       def js_target_file name
-        File.join 'spec/javascripts', js_filename(target name)
+        File.join 'spec/javascripts', js_filename(resolved_target name)
       end
 
       def coffee_target_file name
-        File.join 'spec/javascripts', coffee_filename(target name)
+        File.join 'spec/javascripts', coffee_filename(resolved_target name)
       end
 
-      def resolve_target name
-        resolve_map(name.to_sym) || name
+      def resolved_target name
+        resolve_map[name.to_sym] || name
       end
 
       def resolve_map
