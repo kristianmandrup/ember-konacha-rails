@@ -1,9 +1,7 @@
-require 'net/http'
-
 module EmberKonacha
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      class_option  :sinon_version, type: :string, default: '1.6',
+      class_option  :sinon, type: :string, default: '1.6.0',
                     desc:   'Sinon version to get',
                     banner: 'Sinon version'
 
@@ -18,13 +16,16 @@ module EmberKonacha
       source_root File.expand_path('../templates', __FILE__)
 
       def do_validations
-        validate_driver! 
+        validate_driver!
+        validate_sinon_version! 
       end
 
       def add_gems        
-        ['konacha', js_driver, ].each do |gem_name|
-          gem gem_name, group: [:development, :test] unless has_gem? gem_name
+        unless has_gem? 'konacha'
+          gem 'konacha', group: [:development, :test] 
         end
+
+        has_gem?(js_driver) ? skip_driver : gem(js_driver, group: [:development, :test])
 
         unless has_gem?('coffee-rails') || !coffee?
           gem 'coffee-rails'
@@ -44,14 +45,24 @@ module EmberKonacha
       def create_vendor_files
         return if has_sinon_file?
 
-        vendor(sinon_path) do
-          get_remote_file :sinon, sinon_version
+        require 'httparty'
+
+        sinon_content = get_remote_file :sinon, sinon_version
+
+        puts "write sinon: #{sinon_content}"
+
+        unless sinon_content.blank?
+          say "Sinon js empty!", :red
+          exit
         end
+
+        vendor(sinon_path, sinon_content)
+
       rescue Exception => e
-        puts e.inspect
         say e.message, :red
-        say "Sinon URI access/download error! Using Sinon-1.6 supplied by the generator gem ;)"
-        template 'sinon.js', 'vendor/assets/javascripts/sinon.js'
+        say %Q{Sinon URI access/download error: #{@uri}. 
+Using sinon-1.6.js supplied by this gem ;)}
+        template 'vendor/sinon.js', 'vendor/assets/javascripts/sinon.js'
       end
 
       def create_spec_files
@@ -61,7 +72,7 @@ module EmberKonacha
       end
 
       def add_pre
-        return unless File.exist? Rails.root.join(coffee_manifest_file)
+        return unless has_file? Rails.root.join(coffee_manifest_file)
 
         # ensure App is prefixed with window namespace!
         gsub_file coffee_manifest_file, /[^\.]App =/ do |match|
@@ -82,10 +93,20 @@ module EmberKonacha
 
 
       def post_install_notice
+        return if skipped_driver?
+
         say nice(js_driver_notice) , :green
       end
 
       protected
+
+      def skip_driver
+        @skipped_driver = true
+      end
+
+      def skipped_driver?
+        @skipped_driver
+      end
 
       def nice text
         border + text
@@ -100,7 +121,15 @@ module EmberKonacha
       end
 
       def has_sinon_file?
-        File.exist? sinon_file_path
+        @has_sinon ||= has_file? sinon_file_path
+      end
+
+      def has_file? path
+        File.exist?(path) && !blank_file?(sinon_file_path)
+      end
+
+      def blank_file? path
+        File.open(path).read.blank?
       end
 
       def sinon_file_path
@@ -153,7 +182,13 @@ gem install therubyrhino
       end
 
       def sinon_version
-        options[:sinon_version]
+        @sinon_version ||= options[:sinon]
+      end
+
+      def validate_sinon_version!
+        unless sinon_version =~ /\d\.\d\.\d/
+          say "Invalid sinon version format, must be of the form: x.y.z, f.ex 1.5.2, was: #{sinon_version}", :red
+        end
       end
 
       def with_index?
@@ -166,7 +201,7 @@ gem install therubyrhino
 
       def validate_driver! 
         unless valid_driver? js_driver
-          raise "Invalid javascript driver #{js_driver}, must be one of: #{valid_drivers}"  
+          say "Invalid javascript driver #{js_driver}, must be one of: #{valid_drivers}" , :red
         end
       end
 
@@ -194,9 +229,13 @@ gem install therubyrhino
 
       def get_remote_file name, version = nil    
         url = version_it remote_uri[name.to_sym], version
-        uri = URI url
-        puts "uri: #{uri}"
-        Net::HTTP.get uri
+        @uri = URI url
+        say "Trying to download sinon.js (#{@uri}) ..."
+        response = HTTParty.get @uri
+
+        puts response.inspect
+
+        response.code != "404" ? result.body : nil
       end
 
       def version_it uri, version = nil

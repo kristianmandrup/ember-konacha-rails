@@ -3,7 +3,7 @@
 
 describe "App.Store", ->
   beforeEach( ->
-    Test.store = Util.lookupStore()
+    Test.store = TestUtil.lookupStore()
   )
 
   it "works with latest Ember-Data revision", ->

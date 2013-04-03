@@ -2,16 +2,16 @@
 
 describe "App.<%= class_name %>Controller", ->
   beforeEach( ->
-    Test.store = Util.lookupStore()
+    Test.store = TestUtil.lookupStore()
 
     Ember.run( ->
       Test.store.loadOne(<%= model_name %>, id: 1, name: 'Alpha')
 
-      controller = <%= controller_name %>.create()
-      controller.set 'content', store.findOne(<%= model_name %>, 1)
+      Test.controller = <%= controller_name %>.create()
+      Test.controller.set 'content', Test.store.findOne(<%= model_name %>, 1)
     )
   )
 
   it "displays items", ->
-    assert.equal  controller.content
-    assert.equal  controller.content.get('id'), '1'
+    assert.equal  Test.controller.content
+    assert.equal  Test.controller.content.get('id'), '1'

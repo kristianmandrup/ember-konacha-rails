@@ -8,12 +8,12 @@ describe "#{base_controller_name}", ->
     Ember.run( ->
       # Configure Test.store ?
 
-      controller = <%= controller_name %>.create()
+      Test.controller = <%= controller_name %>.create()
 
       # Set content
-      controller.set 'content', 'some content'
+      Test.controller.set 'content', 'some content'
     )
   )
 
   it "has specific content", ->
-    assert.equal  controller.content, 'some content'
+    assert.equal  Test.controller.content, 'some content'

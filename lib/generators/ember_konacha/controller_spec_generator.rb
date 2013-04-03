@@ -1,7 +1,10 @@
+require 'active_support'
+require 'generators/ember_konacha/base_helper'
+
 module EmberKonacha
   module Generators
     class ControllerSpecGenerator < Rails::Generators::NamedBase
-      class_option  :type, type: :string, optional: true, default: 'array',
+      class_option  :type, type: :string, aliases: ['t'],
                     desc:   'The type of controller to test',
                     banner: 'controller type: (array, object, base)'
 
@@ -9,14 +12,33 @@ module EmberKonacha
       source_root File.expand_path('../templates', __FILE__)
 
       def create_controller
-        unless valid_type? type
-          raise "Invalid Type, must be one of: #{valid_types}, was: #{type}"
-        end
-
-        template "specs/controller/#{type}_controller_spec.js.coffee.erb", "specs/javascripts/controllers/#{file_name}.js.coffee"
+        say "Creating #{type_name} controller spec", :green
+        template "specs/controller/#{type}_controller_spec.js.coffee.erb", spec_target
       end
 
       protected
+
+      def type_name
+        article = case type.to_sym
+        when :array, :object
+          "an"
+        else
+          "a"
+        end
+        "#{article} #{type}"
+      end
+
+      def validate_type!
+        unless valid_type? type
+          raise "Invalid Type, must be one of: #{valid_types}, was: #{type}"
+        end
+      end
+
+      include EmberKonacha::BaseHelper
+
+      def folder
+        'controllers'
+      end      
 
       def model_name
         "App.#{class_name}"
@@ -39,8 +61,22 @@ module EmberKonacha
       end
 
       def type
-        option[:type] || 'array'
+        @type ||= resolved_type || options[:type]
       end
+
+      def resolved_type
+        if options[:type].blank?
+          return is_plural?(name) ? 'array' : 'object'
+        end
+      end
+
+      def is_plural? str
+        str.singularize.pluralize == str
+      end
+
+      def is_singular? str
+        str.pluralize.singularize == str
+      end      
     end
   end
 end

@@ -2,7 +2,7 @@
 
 describe "#{array_controller_name}", ->
   beforeEach( ->
-    Test.store = Util.lookupStore()
+    Test.store = TestUtil.lookupStore()
 
     Ember.run( ->
       Test.store.loadMany(<%= model_name %>, [
@@ -12,7 +12,7 @@ describe "#{array_controller_name}", ->
       ])
 
       controller = <%= controller_name %>.create()
-      controller.set 'content', store.findMany(<%= model_name %>, [1, 2, 3])
+      controller.set 'content', Test.store.findMany(<%= model_name %>, [1, 2, 3])
     )
   )
 

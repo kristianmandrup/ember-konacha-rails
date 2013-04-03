@@ -1,28 +1,12 @@
-# Ember::Konacha::Rails
+# Ember Konacha generators for Rails
 
-## Important
+Generators to help setup an [ember-rails](https://github.com/emberjs/ember-rails) app with [konacha](https://github.com/jfirebaugh/konacha) testing.
 
-Still experimental! Please help improve it :)
-
+PS: Still young and under development... Please help improve it :)
 
 ## What?
 
 This gem has the stated goal of making it _easy_ to setup a good testing infrastructure for testing your *Ember-Rails* apps.
-
-    $ rails g
-
-```
-...
-
-EmberKonacha:
-  ember_konacha:controller_spec
-  ember_konacha:helper_spec
-  ember_konacha:install
-  ember_konacha:model_spec
-  ember_konacha:view_spec
-
-...  
-```
 
 An `install` generator is included for initial infrastructure setup!
 
@@ -39,8 +23,6 @@ Please help provide more skeleton generators or improve the existing ones!!! :)
 
 ## Installation
 
-
-
 Add this line to your application's Gemfile:
 
     gem 'ember-konacha-rails', github: 'kristianmandrup/ember-konacha-rails'
@@ -52,6 +34,26 @@ And then execute:
 Or (in the near future) install it yourself (from rubygems) as:
 
     $ gem install ember-konacha-rails
+
+
+To see if the generators are installed:
+
+    $ rails g
+
+Note: or use `$ bundle exec rails g` (to execute in context of current bundled environment)
+
+```
+...
+
+EmberKonacha:
+  ember_konacha:controller_spec
+  ember_konacha:helper_spec
+  ember_konacha:install
+  ember_konacha:model_spec
+  ember_konacha:view_spec
+
+...  
+```
 
 ## Usage
 
@@ -72,9 +74,53 @@ spec/javascripts/app/router_spec.js.coffee
 spec/javascripts/app/store_spec.js.coffee
 ```
 
-Run Koncha!
+### Run examples 
+
+*Clean run (default settings)*
+
+$ rails g ember_konacha:install
+     gemfile  konacha
+     gemfile  poltergeist
+      create  spec/javascripts/spec_helper.js.coffee
+      create  spec/javascripts/support/konacha_config.js.coffee
+      create  spec/javascripts/support/sinon_mvc_mocks.js
+Trying to download sinon.js (http://sinonjs.org/releases/sinon-1.6.js) ...      
+      vendor  assets/javascripts/sinon.js
+      create  spec/javascripts/app/store_spec.js.coffee
+      create  spec/javascripts/app/router_spec.js.coffee
+        gsub  app/assets/javascripts/application.js.coffee
+      append  app/assets/javascripts/application.js.coffee
+================================================================================
+Note: poltergeist requires you have installed PhantomJS headless JS driver.
+
+via Homebrew:
+
+brew install phantomjs
+
+MacPorts:
+
+sudo port install phantomjs
+
+See https://github.com/jonleighton/poltergeist
+
+*Install generator was run previously*
+
+```
+$ rails g ember_konacha:install
+   identical  spec/javascripts/spec_helper.js.coffee
+   identical  spec/javascripts/support/konacha_config.js.coffee
+   identical  spec/javascripts/support/sinon_mvc_mocks.js
+   identical  spec/javascripts/app/store_spec.js.coffee
+   identical  spec/javascripts/app/router_spec.js.coffee
+        gsub  app/assets/javascripts/application.js.coffee
+      append  app/assets/javascripts/application.js.coffee
+```
+
+Now run Konacha!
 
     $ bundle exec rake konacha:run
+
+See more run options at https://github.com/jfirebaugh/konacha
 
 Note: make sure that the following is at the end of your `application.js.coffee` file:
 
@@ -94,27 +140,37 @@ The `spec_helper` initializes the app explicitly using `App.advanceReadiness()` 
 
 To see install options, run:
 
-    $ bundle exec rails g ember_konacha:install --help
+    $ rails g ember_konacha:install --help
 
 Note: To avoid having to `bundle exec` install the gem in your current system gem repository, using `gem install ember_konacha` (when this is an official gem!).
 
 ### Generate Controller spec
 
-    $ bundle exec rails g ember_konacha:controller_spec Login
+Use the `--type` or `-t` option to specify type of controller (will try to auto-determine otherwise)
+
+    $ rails g ember_konacha:controller_spec login -t base
 
 `spec/javascripts/controllers/login_controller_spec.js.coffee`
 
-    $ bundle exec rails g ember_konacha:controller User --type object
+    $ rails g ember_konacha:controller User --type object
 
 `spec/javascripts/controllers/user_controller_spec.js.coffee`
 
-    $ bundle exec rails g ember_konacha:controller_spec Users --type array
+    $ rails g ember_konacha:controller_spec Users -t array
 
-`spec/javascripts/controllers/users_controller_spec.js.coffee`
+`spec/javascripts/controllers/user_controller_spec.js.coffee`
+
+    $ rails g ember_konacha:controller_spec Users
+
+Will autodetect that users is a plural form of user and assume you have an array (resource) controller.
+
+    $ rails g ember_konacha:helper_spec persons 
+
+Will generate an object controller, since persons is not a valid plural form!
 
 ### Generate Model spec
 
-    $ bundle exec rails g ember_konacha:model_spec User
+    $ rails g ember_konacha:model_spec user
 
 `spec/javascripts/models/user_spec.js.coffee`
 
@@ -126,13 +182,13 @@ Note: To avoid having to `bundle exec` install the gem in your current system ge
 
 ### Generate Helper spec
 
-    $ bundle exec rails g ember_konacha:model_spec Gravitation
+    $ rails g ember_konacha:model_spec gravitation
 
 `spec/javascripts/helpers/gravitation_helper_spec.js.coffee`
 
 ## Contributing
 
-Please help make it easier for developers tp get started using TDD (or BDD) for Ember with Rails.
+Please help make it easier for developers tp get started using *Test Driven Development* (or BDD) for Ember with Rails.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
