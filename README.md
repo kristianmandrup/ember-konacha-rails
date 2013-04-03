@@ -24,15 +24,17 @@ Please help provide more skeleton generators or improve the existing ones!!! :)
 
 ## Installation
 
+
+
 Add this line to your application's Gemfile:
 
-    gem 'ember-konacha-rails'
+    gem 'ember-konacha-rails', github: 'kristianmandrup/ember-konacha-rails'
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Or (in the near future) install it yourself (from rubygems) as:
 
     $ gem install ember-konacha-rails
 
