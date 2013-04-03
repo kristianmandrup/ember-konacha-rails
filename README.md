@@ -21,6 +21,8 @@ Can generate *Konacha* spec-skeletons for:
 
 Please help provide more skeleton generators or improve the existing ones!!! :)
 
+_Notice: You can find more generators/scaffolders as part of [ember-tools](https://github.com/rpflorence/ember-tools/)_
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -31,7 +33,7 @@ And then execute:
 
     $ bundle
 
-Or (in the near future) install it yourself (from rubygems) as:
+Or install it yourself (from rubygems) as:
 
     $ gem install ember-konacha-rails
 
@@ -59,7 +61,7 @@ EmberKonacha:
 
 Install basic Konacha infrastructure
 
-    $ bundle exec rails g ember_konacha:install
+    $ rails g ember_konacha:install
 
 Files that should be generated
 
