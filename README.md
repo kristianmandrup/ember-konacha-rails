@@ -9,6 +9,21 @@ Still experimental! Please help improve it :)
 
 This gem has the stated goal of making it _easy_ to setup a good testing infrastructure for testing your *Ember-Rails* apps.
 
+    $ rails g
+
+```
+...
+
+EmberKonacha:
+  ember_konacha:controller_spec
+  ember_konacha:helper_spec
+  ember_konacha:install
+  ember_konacha:model_spec
+  ember_konacha:view_spec
+
+...  
+```
+
 An `install` generator is included for initial infrastructure setup!
 
 Configures your Ember app with *Konacha* using a Javascript driver (poltergeist for PhantomJS by default). Adds the basic Konacha infrastructure so you can start writing tests/specs.
@@ -42,7 +57,7 @@ Or (in the near future) install it yourself (from rubygems) as:
 
 Install basic Konacha infrastructure
 
-    $ rails g ember-konacha:install
+    $ rails g ember_konacha:install
 
 Files that should be generated
 
@@ -79,37 +94,37 @@ The `spec_helper` initializes the app explicitly using `App.advanceReadiness()` 
 
 To see install options, run:
 
-    $ rails g ember-konacha:install --help
+    $ rails g ember_konacha:install --help
 
 ### Generate Controller spec
 
-    $ rails g ember-konacha:controller Login
+    $ rails g ember_konacha:controller Login
 
 `spec/javascripts/controllers/login_controller_spec.js.coffee`
 
-    $ rails g ember-konacha:controller User --type object
+    $ rails g ember_konacha:controller User --type object
 
 `spec/javascripts/controllers/user_controller_spec.js.coffee`
 
-    $ rails g ember-konacha:controller Users --type array
+    $ rails g ember_konacha:controller Users --type array
 
 `spec/javascripts/controllers/users_controller_spec.js.coffee`
 
 ### Generate Model spec
 
-    $ rails g ember-konacha:model User
+    $ rails g ember_konacha:model User
 
 `spec/javascripts/models/user_spec.js.coffee`
 
 ### Generate View spec
 
-    $ rails g ember-konacha:view NewUser
+    $ rails g ember_konacha:view NewUser
 
 `spec/javascripts/views/new_user_view_spec.js.coffee`
 
 ### Generate Helper spec
 
-    $ rails g ember-konacha:model Gravitation
+    $ rails g ember_konacha:model Gravitation
 
 `spec/javascripts/helpers/gravitation_helper_spec.js.coffee`
 

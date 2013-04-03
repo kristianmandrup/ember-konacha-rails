@@ -1,6 +1,6 @@
 module EmberKonacha
   module Generators
-    class ModelSpecGenerator < Rails::Generators::NamedBase
+    class HelperSpecGenerator < Rails::Generators::NamedBase
       def create_model
         template "specs/helper_spec.js.coffee.erb", "specs/javascripts/helpers/#{file_name}.js.coffee"
       end

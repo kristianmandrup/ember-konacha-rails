@@ -3,13 +3,11 @@ require 'net/http'
 module EmberKonacha
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      class_option  :sinon_version, type: :string, 
-                    default: '1.6'
+      class_option  :sinon_version, type: :string, default: '1.6',
                     desc:   'Sinon version to get',
                     banner: 'Sinon version'
 
-      class_option  :driver, type: :string, 
-                    default: 'poltergeist'
+      class_option  :driver, type: :string, default: 'poltergeist',
                     desc:   'Javascript driver to use',
                     banner: 'Javascript driver'
 
@@ -53,10 +51,10 @@ module EmberKonacha
       end
 
       def add_pre
-        return unless File.exist? Rails.root.join coffee_manifest_file
+        return unless File.exist? Rails.root.join(coffee_manifest_file)
 
         # ensure App is prefixed with window namespace!
-        gsub_file coffee_manifest_file, /[^\.]App =/, :green do |match|
+        gsub_file coffee_manifest_file, /[^\.]App =/ do |match|
           match << "window.App ="
         end        
 
@@ -66,10 +64,10 @@ module EmberKonacha
       end
 
       def create_view_files
-        if option[:with_index]
-          copy_file 'spec/views/layouts/application.html.slim', 'app/views/layouts/application.html.slim'
-          copy_file 'spec/views/application/index.html.slim', 'app/views/application/index.html.slim'
-        end
+        return unless option[:with_index]
+        
+        copy_file 'spec/views/layouts/application.html.slim', 'app/views/layouts/application.html.slim'
+        copy_file 'spec/views/application/index.html.slim', 'app/views/application/index.html.slim'
       end
 
       protected
@@ -99,7 +97,7 @@ module EmberKonacha
       def spec_template name
         src_file = File.join 'specs/app', name
         target_file = File.join 'app', name
-        template coffee_filename(), coffee_target_file name
+        template coffee_filename, coffee_target_file(name)
       end
 
       def spec_files
@@ -108,12 +106,13 @@ module EmberKonacha
 
       def get_remote_file name, version = nil    
         url = version_it remote_uri(name.to_sym), version
-        uri = URI( url )
+        uri = URI url
         Net::HTTP.get uri
       end
 
       def version_it uri, version = nil
         return uri if !version
+        uri.sub /VERSION/, version
       end
 
       def remote_uri
@@ -127,11 +126,11 @@ module EmberKonacha
       end
 
       def coffee_template name
-        template coffee_filename(name), coffee_target_file name
+        template coffee_filename(name), coffee_target_file(name)
       end
 
       def js_template name
-        template js_filename(name), js_target_file name
+        template js_filename(name), js_target_file(name)
       end
 
       def js_target_file name

@@ -1,8 +1,7 @@
 module EmberKonacha
   module Generators
     class ControllerSpecGenerator < Rails::Generators::NamedBase
-      class_option  :type, type: :string, optional: true, 
-                    default: 'array'
+      class_option  :type, type: :string, optional: true, default: 'array',
                     desc:   'The type of controller to test',
                     banner: 'controller type: (array, object, base)'
 
