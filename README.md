@@ -21,7 +21,16 @@ Can generate *Konacha* spec-skeletons for:
 
 Please help provide more skeleton generators or improve the existing ones!!! :)
 
-_Notice: You can find more generators/scaffolders as part of [ember-tools](https://github.com/rpflorence/ember-tools/)_
+### More generators
+
+You can find more generators/scaffolders as part of [ember-tools](https://github.com/rpflorence/ember-tools/)
+
+[ember-i18n-rails](https://github.com/andrzejsliwa/ember-i18n-rails) or [here](https://github.com/kristianmandrup/ember-i18n-rails). Includes generators to configure and manage *i18n* with Ember and Rails.
+
+### Other Ember-Rails tools
+
+* [page_wrapper](https://github.com/mathieul/page_wrapper)
+* [elasticsearch](https://github.com/karmi/ember-data-elasticsearch)
 
 ## Installation
 
