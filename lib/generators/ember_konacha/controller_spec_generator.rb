@@ -6,6 +6,8 @@ module EmberKonacha
                     banner: 'controller type: (array, object, base)'
 
 
+      source_root File.expand_path('../templates', __FILE__)
+
       def create_controller
         unless valid_type? type
           raise "Invalid Type, must be one of: #{valid_types}, was: #{type}"

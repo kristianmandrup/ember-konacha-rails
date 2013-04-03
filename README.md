@@ -57,7 +57,7 @@ Or (in the near future) install it yourself (from rubygems) as:
 
 Install basic Konacha infrastructure
 
-    $ rails g ember_konacha:install
+    $ bundle exec rails g ember_konacha:install
 
 Files that should be generated
 
@@ -94,37 +94,39 @@ The `spec_helper` initializes the app explicitly using `App.advanceReadiness()` 
 
 To see install options, run:
 
-    $ rails g ember_konacha:install --help
+    $ bundle exec rails g ember_konacha:install --help
+
+Note: To avoid having to `bundle exec` install the gem in your current system gem repository, using `gem install ember_konacha` (when this is an official gem!).
 
 ### Generate Controller spec
 
-    $ rails g ember_konacha:controller Login
+    $ bundle exec rails g ember_konacha:controller_spec Login
 
 `spec/javascripts/controllers/login_controller_spec.js.coffee`
 
-    $ rails g ember_konacha:controller User --type object
+    $ bundle exec rails g ember_konacha:controller User --type object
 
 `spec/javascripts/controllers/user_controller_spec.js.coffee`
 
-    $ rails g ember_konacha:controller Users --type array
+    $ bundle exec rails g ember_konacha:controller_spec Users --type array
 
 `spec/javascripts/controllers/users_controller_spec.js.coffee`
 
 ### Generate Model spec
 
-    $ rails g ember_konacha:model User
+    $ bundle exec rails g ember_konacha:model_spec User
 
 `spec/javascripts/models/user_spec.js.coffee`
 
 ### Generate View spec
 
-    $ rails g ember_konacha:view NewUser
+    $ bundle exec rails g ember_konacha:view_spec NewUser
 
 `spec/javascripts/views/new_user_view_spec.js.coffee`
 
 ### Generate Helper spec
 
-    $ rails g ember_konacha:model Gravitation
+    $ bundle exec rails g ember_konacha:model_spec Gravitation
 
 `spec/javascripts/helpers/gravitation_helper_spec.js.coffee`
 

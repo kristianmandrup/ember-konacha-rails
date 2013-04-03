@@ -15,6 +15,7 @@ module EmberKonacha
                     desc:   'Generate default view files for single page app',
                     banner: 'Generate html view (index.html)'
 
+      source_root File.expand_path('../templates', __FILE__)
 
       def do_validations
         validate_driver! 
@@ -37,7 +38,7 @@ module EmberKonacha
 
       def create_vendor_files
         vendor("assets/javascripts/sinon.js") do
-          get_remote_file :sinon, option[:sinon_version]
+          get_remote_file :sinon, sinon_version
         end
       rescue
         say "Sinon URI access/download error! Using Sinon-1.6 supplied by the generator gem ;)"
@@ -64,13 +65,21 @@ module EmberKonacha
       end
 
       def create_view_files
-        return unless option[:with_index]
+        return unless with_index?
         
         copy_file 'spec/views/layouts/application.html.slim', 'app/views/layouts/application.html.slim'
         copy_file 'spec/views/application/index.html.slim', 'app/views/application/index.html.slim'
       end
 
       protected
+
+      def sinon_version
+        options[:sinon_version]
+      end
+
+      def with_index?
+        options[:with_index]
+      end
 
       def coffee_manifest_file
         'app/assets/javascripts/application.js.coffee'
