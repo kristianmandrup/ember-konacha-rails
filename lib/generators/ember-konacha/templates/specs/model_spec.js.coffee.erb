@@ -1,0 +1,17 @@
+#= require spec_helper
+
+describe "<%= model_name %>", ->
+  beforeEach( ->
+    Test.store = Util.lookupStore()
+  )
+
+  it "is a DS.Model", ->
+    assert.ok <%= model_name %>
+    assert.ok DS.Model.detect(<%= model_name %>)
+
+  describe "name", ->
+    it "has a name", ->
+      Ember.run( ->
+        Test.contact = <%= model_name %>.createRecord name: 'Joe'
+      )
+      assert.equal Test.contact.get('name'), 'Joe'

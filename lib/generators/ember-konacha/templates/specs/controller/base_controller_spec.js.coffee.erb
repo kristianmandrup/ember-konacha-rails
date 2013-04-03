@@ -1,0 +1,19 @@
+#= require spec_helper
+
+describe "#{base_controller_name}", ->
+  beforeEach( ->
+    # Init store
+    Test.store = Util.lookupStore()
+
+    Ember.run( ->
+      # Configure Test.store ?
+
+      controller = <%= controller_name %>.create()
+
+      # Set content
+      controller.set 'content', 'some content'
+    )
+  )
+
+  it "has specific content", ->
+    assert.equal  controller.content, 'some content'
