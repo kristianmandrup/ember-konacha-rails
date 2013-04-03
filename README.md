@@ -186,6 +186,12 @@ Will generate an object controller, since persons is not a valid plural form!
 
 `spec/javascripts/helpers/gravitation_helper_spec.js.coffee`
 
+## Sinon notice
+
+The install generator will attempt to download sinon.js, first via httparty and then try via curl. On any exception it will fall back to just copying _sinon-1.6.0.js_.
+
+Read more on [http://sinonjs.org/] for mocking, stubbing and creating test spies ;)
+
 ## Contributing
 
 Please help make it easier for developers tp get started using *Test Driven Development* (or BDD) for Ember with Rails.

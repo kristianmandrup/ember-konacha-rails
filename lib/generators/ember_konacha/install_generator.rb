@@ -49,11 +49,10 @@ module EmberKonacha
 
         sinon_content = get_remote_file :sinon, sinon_version
 
-        puts "write sinon: #{sinon_content}"
+        return if has_file? sinon_file_path
 
-        unless sinon_content.blank?
-          say "Sinon js empty!", :red
-          exit
+        if sinon_content.blank?
+          fallback_sinon!
         end
 
         vendor(sinon_path, sinon_content)
@@ -62,6 +61,10 @@ module EmberKonacha
         say e.message, :red
         say %Q{Sinon URI access/download error: #{@uri}. 
 Using sinon-1.6.js supplied by this gem ;)}
+        fallback_sinon!
+      end
+
+      def fallback_sinon!
         template 'vendor/sinon.js', 'vendor/assets/javascripts/sinon.js'
       end
 
@@ -233,9 +236,12 @@ gem install therubyrhino
         say "Trying to download sinon.js (#{@uri}) ..."
         response = HTTParty.get @uri
 
-        puts response.inspect
-
         response.code != "404" ? result.body : nil
+
+      rescue Exception => e
+        empty_directory "vendor/assets/javascripts"
+        command = "curl #{@uri} -o vendor/#{sinon_path}"
+        %x[curl #{@uri} -o vendor/#{sinon_path}]
       end
 
       def version_it uri, version = nil
