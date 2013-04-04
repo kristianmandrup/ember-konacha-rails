@@ -227,6 +227,10 @@ The install generator will attempt to download sinon.js, first via httparty and 
 
 Read more on [http://sinonjs.org/] for mocking, stubbing and creating test spies ;)
 
+### Application structure
+
+A proposed [Ember App structure](https://github.com/kristianmandrup/ember-konacha-rails/EmberStructure.md) is included for reference.
+
 ## Contributing
 
 Please help make it easier for developers tp get started using *Test Driven Development* (or BDD) for Ember with Rails.
