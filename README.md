@@ -131,9 +131,16 @@ Now run Konacha!
 
     $ bundle exec rake konacha:run
 
+To run specs in browser
+
+    $ bundle exec rake konacha:serve
+    $ open http://localhost:3500
+
 See more run options at https://github.com/jfirebaugh/konacha
 
-Note: make sure that the following is at the end of your `application.js.coffee` file:
+## Notice
+
+Make sure that the following is at the end of your `application.js.coffee` file (or similar for pure javascript):
 
 ```javascript
 window.App = Ember.Application.create LOG_TRANSITIONS: true
@@ -143,17 +150,24 @@ window.App = Ember.Application.create LOG_TRANSITIONS: true
 App.deferReadiness()
 ```
 
-(or similar for pure javascript)
-
 The basic test setup/configuration can be found in `support/koncha_config.js.coffee` and `spec_helper.js.coffee` files.
 
-The `spec_helper` initializes the app explicitly using `App.advanceReadiness()` within `Ember.run` in the `beforeEach` closure. To run your app in the browser, while also allowing for testing, you need to explicitly call `App.advanceReadiness()` when your DOM is ready.
+The `spec_helper` initializes the app explicitly using `App.advanceReadiness()` within `Ember.run` in the `beforeEach` closure. To run your app in the browser, while also allowing for testing, you need to explicitly call `App.advanceReadiness()`, f.ex  when your DOM is ready.
+
+```javascript
+$ ->
+  App.advanceReadiness()
+```
+
+If you run the `install` generator with the `--with-index` option on, it will attempt to generate a standard application layout and index view file, with this all setup for you (using slim templating language!)
+
+### Install options
 
 To see install options, run:
 
     $ rails g ember_konacha:install --help
 
-Note: To avoid having to `bundle exec` install the gem in your current system gem repository, using `gem install ember_konacha` (when this is an official gem!).
+Note: To avoid having to `bundle exec` install the gem in your current system gem repository, use `gem install ember_konacha` (when this is an official gem!).
 
 ## Guard Koncha config generator
 

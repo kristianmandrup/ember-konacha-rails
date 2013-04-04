@@ -1,4 +1,5 @@
 require 'generators/ember_konacha/gem_helper'
+require 'generators/ember_konacha/setup_guide'
 
 module EmberKonacha
   module Generators
@@ -14,6 +15,10 @@ module EmberKonacha
       class_option  :with_index, type: :boolean, default: false,
                     desc:   'Generate default view files for single page app',
                     banner: 'Generate html view (index.html)'
+
+      class_option  :guide, type: :boolean, default: false,
+                    desc:   'Display a brief Ember Rails setup guide',
+                    banner: 'Display setup guide'
 
       source_root File.expand_path('../templates', __FILE__)
 
@@ -93,12 +98,30 @@ Using sinon-1.6.js supplied by this gem ;)}
 
       def create_view_files
         return unless with_index?
+
+        gem 'slim' unless has_gem? 'slim'
         
-        copy_file 'spec/views/layouts/application.html.slim', 'app/views/layouts/application.html.slim'
-        copy_file 'spec/views/application/index.html.slim', 'app/views/application/index.html.slim'
+        draw_border
+        say "Creating application index file and layout (slim)", :green
+
+        copy_file 'views/layouts/application.html.slim', 'app/views/layouts/application.html.slim'
+        copy_file 'views/application/index.html.slim',   'app/views/application/index.html.slim'
+
+        bundle_gems!
       end
 
+      def setup_guide
+        return unless guide?
 
+        draw_border
+        say %q{You might consider using RailsAPI (gem 'rails-api') for the REST API routes
+The root route should go through a normal Rails controller (< ActionController::Base)
+}, :green
+        
+        draw_border
+        say setup_example, :green
+      end        
+    
       def post_install_notice
         return if skipped_driver?
 
@@ -107,7 +130,12 @@ Using sinon-1.6.js supplied by this gem ;)}
 
       protected
 
+      include EmberKonacha::SetupGuide
       include EmberKonacha::GemHelper
+
+      def draw_border width = 80
+        say border(width), :green
+      end
 
       def skip_driver
         @skipped_driver = true
