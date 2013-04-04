@@ -155,6 +155,16 @@ To see install options, run:
 
 Note: To avoid having to `bundle exec` install the gem in your current system gem repository, using `gem install ember_konacha` (when this is an official gem!).
 
+## Guard Koncha config generator
+
+To setup your project with Guard and execute koncha specs whenever your javascript assets change (default driver: poltergeist)
+
+    $ rails g ember_konacha:guard
+
+To specify a specific js driver (selenium or webkit):
+
+    $ rails g ember_konacha:guard --driver wekbkit
+
 ### Generate Controller spec
 
 Use the `--type` or `-t` option to specify type of controller (will try to auto-determine otherwise)
