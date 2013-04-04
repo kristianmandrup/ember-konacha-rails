@@ -27,6 +27,8 @@ window.TestUtil ||=
 
 # Useful for placing local test vars
 window.Test ||= {}
+# Shorthand
+window.T = Test 
 
 # **** Global before / after ***
 
@@ -42,6 +44,9 @@ beforeEach( (done) ->
     # Prevent automatic scheduling of runloops. For tests, we
     # want to have complete control of runloops.
     Ember.testing = true
+
+    # reset all test variables!
+    window.Test = {}
 
     Ember.run( ->
       # Advance App readiness, which was deferred when the app
@@ -63,6 +68,9 @@ afterEach( ->
   Ember.run( ->
     App.reset()
   )
+
+  # reset all test variables!
+  window.Test = {}
 
   # Restore XHR
   window.server.restore()

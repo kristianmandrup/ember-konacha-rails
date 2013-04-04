@@ -3,7 +3,17 @@
 describe "<%= helper_name %>", ->
   beforeEach( ->
     # setup
+    Test.helper = <%= helper_name %>    
   )
 
   it "is there", ->
     assert.ok <%= helper_name %>
+
+  describe ".inc", ->
+    it "increments number", ->
+      Ember.run( ->
+        subject = 1
+        result = <%= helper_name %>.inc subject
+      )
+
+      expect(result).to.equal 2

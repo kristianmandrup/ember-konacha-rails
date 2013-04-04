@@ -1,3 +1,5 @@
+require 'generators/ember_konacha/gem_helper'
+
 module EmberKonacha
   module Generators
     class InstallGenerator < Rails::Generators::Base
@@ -30,6 +32,8 @@ module EmberKonacha
         unless has_gem?('coffee-rails') || !coffee?
           gem 'coffee-rails'
         end
+
+        bundle_gems!
       end
 
       def create_infra_files
@@ -103,6 +107,8 @@ Using sinon-1.6.js supplied by this gem ;)}
 
       protected
 
+      include EmberKonacha::GemHelper
+
       def skip_driver
         @skipped_driver = true
       end
@@ -172,17 +178,6 @@ gem install therubyrhino
         end
       end
 
-      def has_gem? name
-        gemfile_content =~ /gem\s+('|")#{name}/
-      end
-
-      def gemfile_content
-        @gemfile_content ||= gemfile.read
-      end
-
-      def gemfile
-        @gemfile ||= File.open Rails.root.join('Gemfile'), 'r'
-      end
 
       def sinon_version
         @sinon_version ||= options[:sinon]
