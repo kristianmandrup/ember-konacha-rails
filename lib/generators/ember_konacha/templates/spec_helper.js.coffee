@@ -38,29 +38,29 @@ window.T = Test
 Konacha.reset = Ember.K
 
 beforeEach( (done) ->
-    # Fake XHR
-    window.server = TestUtil.fakeServer()
+  # Fake XHR
+  window.server = TestUtil.fakeServer()
 
-    # Prevent automatic scheduling of runloops. For tests, we
-    # want to have complete control of runloops.
-    Ember.testing = true
+  # Prevent automatic scheduling of runloops. For tests, we
+  # want to have complete control of runloops.
+  Ember.testing = true
 
-    # reset all test variables!
-    window.Test = {}
+  # reset all test variables!
+  window.Test = {}
 
-    Ember.run( ->
-      # Advance App readiness, which was deferred when the app
-      # was created.
+  Ember.run( ->
+    # Advance App readiness, which was deferred when the app
+    # was created.
 
-      # This needs to be done here, after each iframe has been setup,
-      # instead of in a global `before`.
-      App.advanceReadiness()
+    # This needs to be done here, after each iframe has been setup,
+    # instead of in a global `before`.
+    App.advanceReadiness()
 
-      # When App readiness promise resolves, setup is complete
-      App.then( ->
-        done()
-      )
+    # When App readiness promise resolves, setup is complete
+    App.then( ->
+      done()
     )
+  )
 )
 
 afterEach( ->
