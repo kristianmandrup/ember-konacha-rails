@@ -137,20 +137,20 @@ The root route should go through a normal Rails controller (< ActionController::
         say border(width), :green
       end
 
-      def skip_driver
-        @skipped_driver = true
-      end
-
-      def skipped_driver?
-        @skipped_driver
-      end
-
       def nice text
         border + text
       end
 
       def border width = 80
         @border ||= "=" * width + "\n"
+      end
+
+      def skip_driver
+        @skipped_driver = true
+      end
+
+      def skipped_driver?
+        @skipped_driver
       end
 
       def coffee?

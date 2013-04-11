@@ -240,3 +240,58 @@ Please help make it easier for developers tp get started using *Test Driven Deve
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## Notes
+
+Sample JSON REST controller (User resource)
+
+```ruby
+class UsersController < APIController
+  def index
+    render_json users
+  end
+
+  def show
+    render_json user
+  end
+
+  def destroy    
+    render_json user.destroy
+  end
+
+  def update        
+    render_json user.update(user_params)
+  end
+
+  def create    
+    render_json user.save
+  end
+
+  protected
+
+  def render_json data, opts = {}
+    render json: data, opts
+  end
+
+  def new_user
+    @new_user ||= User.new user_params
+  end
+
+  def users
+    User.all.to_a
+  end
+
+  def user
+    @user ||= User.find user_id
+  end
+
+  def user_id
+    params[:id]
+  end
+
+  def user_params
+    params[:user]
+  end  
+end
+```
