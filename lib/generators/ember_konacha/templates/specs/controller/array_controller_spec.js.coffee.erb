@@ -1,6 +1,6 @@
 #= require spec_helper
 
-describe "#{array_controller_name}", ->
+describe "<%= array_controller_name %>", ->
   beforeEach( ->
     Test.store = TestUtil.lookupStore()
 
@@ -11,7 +11,7 @@ describe "#{array_controller_name}", ->
         {id: 3, name: 'Zeus'},
       ])
 
-      controller = <%= controller_name %>.create()
+      controller = <%= array_controller_name %>.create()
       controller.set 'content', Test.store.findMany(<%= model_name %>, [1, 2, 3])
     )
   )
