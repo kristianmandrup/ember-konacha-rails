@@ -46,7 +46,6 @@ Or install it yourself (from rubygems) as:
 
     $ gem install ember-konacha-rails
 
-
 To see if the generators are installed:
 
     $ rails g
@@ -89,6 +88,7 @@ spec/javascripts/app/store_spec.js.coffee
 
 *Clean run (default settings)*
 
+```
 $ rails g ember_konacha:install
      gemfile  konacha
      gemfile  poltergeist
@@ -102,15 +102,17 @@ Trying to download sinon.js (http://sinonjs.org/releases/sinon-1.6.js) ...
         gsub  app/assets/javascripts/application.js.coffee
       append  app/assets/javascripts/application.js.coffee
 ================================================================================
+```
+
 Note: poltergeist requires you have installed PhantomJS headless JS driver.
 
 via Homebrew:
 
-brew install phantomjs
+    brew install phantomjs
 
 MacPorts:
 
-sudo port install phantomjs
+    sudo port install phantomjs
 
 See https://github.com/jonleighton/poltergeist
 
