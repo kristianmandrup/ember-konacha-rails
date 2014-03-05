@@ -219,7 +219,7 @@ Will generate an object controller, since persons is not a valid plural form!
 
 ### Generate Helper spec
 
-    $ rails g ember_konacha:model_spec gravitation
+    $ rails g ember_konacha:helper_spec gravitation
 
 `spec/javascripts/helpers/gravitation_helper_spec.js.coffee`
 
