@@ -12,13 +12,13 @@ describe "<%= model_name %>", ->
   describe "attribute: name", ->
     it "can be created with valid value", ->
       Ember.run( ->
-        Test.contact = <%= model_name %>.createRecord name: 'Joe'
+        Test.contact = Test.store.createRecord '<%= class_name.downcase %>', name: 'Joe'
       )
       expect(Test.contact.get 'name').to.equal 'Joe'
 
     it "can NOT be created with invalid value", ->
       Ember.run( ->
-        Test.contact = <%= model_name %>.createRecord name: '123'
+        Test.contact = Test.store.createRecord '<%= class_name.downcase %>', name: '123'
       )
       expect(Test.contact.get 'name').to.not.equal 'Joe'
       expect(Test.contact.isValid).to.be false
