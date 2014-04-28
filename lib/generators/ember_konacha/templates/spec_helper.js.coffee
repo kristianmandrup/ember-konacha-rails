@@ -2,7 +2,7 @@
 #= require sinon
 
 # Load all testing support files
-#= require_tree support
+#= require_tree ./support
 
 #= require application
 
