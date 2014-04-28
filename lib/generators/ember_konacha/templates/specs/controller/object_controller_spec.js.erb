@@ -1,0 +1,19 @@
+// #= require spec_helper
+
+describe("App.<%= class_name %>Controller", function() {
+  beforeEach(function() {
+    Test.store = TestUtil.lookupStore()
+
+    Ember.run(function() {
+      Test.store.loadOne(<%= model_name %>, id: 1, name: 'Alpha')
+
+      Test.controller = <%= controller_name %>.create();
+      Test.controller.set('content', Test.store.findOne(<%= model_name %>, 1));
+    });
+  });
+
+  it("displays items", function() {
+    assert.equal(Test.controller.content);
+    assert.equal(Test.controller.content.get('id'), '1');
+  });
+});

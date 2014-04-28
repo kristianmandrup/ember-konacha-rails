@@ -1,0 +1,31 @@
+// #= require spec_helper
+
+describe("<%= model_name %>", function() {
+  beforeEach(function() {
+    Test.store = TestUtil.lookupStore();
+  })
+
+  it("is a DS.Model", function() {
+    assert.ok(<%= model_name %>);
+    assert.ok(DS.Model.detect(<%= model_name %>));
+  });
+
+  describe("attribute: name", function() {
+    it("can be created with valid value", function() {
+      Ember.run(function() {
+        Test.contact = Test.store.createRecord('<%= class_name.downcase %>', name: 'Joe');
+      });
+
+      expect(Test.contact.get 'name').to.equal('Joe');
+    });
+
+    it "can NOT be created with invalid value", ->
+      Ember.run(function() {
+        Test.contact = Test.store.createRecord('<%= class_name.downcase %>', name: '123');
+      });
+      
+      expect(Test.contact.get 'name').to.not.equal('Joe');
+      expect(Test.contact.isValid).to.be(false);
+    });
+  });
+});

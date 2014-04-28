@@ -203,6 +203,14 @@ Will autodetect that users is a plural form of user and assume you have an array
 
 Will generate an object controller, since persons is not a valid plural form!
 
+### Generator options
+
+`--ext` Script language to generate, `javascript` or `coffeescript` (`coffee` is default)
+
+`--ext es` (ECMA script) or `--ext coffee` are both valid. 
+
+Note: Any other value than `coffee` will resolve to `javascript`.
+
 ### Generate Model spec
 
     $ rails g ember_konacha:model_spec user
@@ -217,9 +225,11 @@ Will generate an object controller, since persons is not a valid plural form!
 
 ### Generate Helper spec
 
-    $ rails g ember_konacha:helper_spec gravitation
+Generate javascript Helper
 
-`spec/javascripts/helpers/gravitation_helper_spec.js.coffee`
+    $ rails g ember_konacha:helper_spec gravitation --ext javascript
+
+`spec/javascripts/helpers/gravitation_helper_spec.js`
 
 ## Sinon notice
 

@@ -1,0 +1,20 @@
+// #= require spec_helper
+
+describe("<%= controller_name %>", function() {
+  beforeEach(function() {
+    // # Init store
+    Test.store = Util.lookupStore();
+
+    Ember.run(function() {
+      // # Configure Test.store ?
+      Test.controller = <%= controller_name %>.create();
+
+      // # Set content
+      Test.controller.set('content', 'some content');
+    });
+  });
+
+  it("has specific content", function() {
+    assert.equal  Test.controller.content, 'some content'
+  });
+});

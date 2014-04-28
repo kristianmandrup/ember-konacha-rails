@@ -1,0 +1,22 @@
+// #= require spec_helper
+
+describe("<%= helper_name %>", function() {
+  beforeEach(function() {
+    # setup
+    Test.helper = <%= helper_name %>    
+  });
+
+  it("is there", function() {
+    assert.ok(<%= helper_name %>);
+  })
+
+  describe(".inc", function() {
+    it("increments number", function() {
+      Ember.run(function() {
+        subject = 1
+        result = <%= helper_name %>.inc(subject)
+      });
+
+      expect(result).to.equal(2);
+    });
+  });

@@ -3,17 +3,15 @@ require 'generators/ember_konacha/base_helper'
 
 module EmberKonacha
   module Generators
-    class ControllerSpecGenerator < Rails::Generators::NamedBase
+    class ControllerSpecGenerator < ::EmberKonacha::BaseHelper
+
       class_option  :type, type: :string, aliases: ['t'],
                     desc:   'The type of controller to test',
                     banner: 'controller type: (array, object, base)'
 
-
-      source_root File.expand_path('../templates', __FILE__)
-
-      def create_controller
+      def create_file
         say "Creating #{type_name} controller spec", :green
-        template "specs/controller/#{type}_controller_spec.js.coffee.erb", spec_target
+        template "specs/controller/#{type}_controller_spec.#{ext}.erb", spec_target
       end
 
       protected

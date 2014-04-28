@@ -2,11 +2,9 @@ require 'generators/ember_konacha/base_helper'
 
 module EmberKonacha
   module Generators
-    class ModelSpecGenerator < Rails::Generators::NamedBase
-      source_root File.expand_path('../templates', __FILE__)
-
-      def create_model
-        template "specs/model_spec.js.coffee.erb", spec_target
+    class ModelSpecGenerator < ::EmberKonacha::BaseHelper
+      def create_file
+        template 'model_spec'
       end
 
       protected

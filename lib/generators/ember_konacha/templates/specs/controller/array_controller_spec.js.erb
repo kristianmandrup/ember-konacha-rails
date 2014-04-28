@@ -1,0 +1,25 @@
+// #= require spec_helper
+
+describe("<%= array_controller_name %>", function() {
+  beforeEach(function() {
+    Test.store = TestUtil.lookupStore();
+
+    Ember.run(function() {
+      Test.store.loadMany(<%= model_name %>, [
+        {id: 1, name: 'Alpha'},
+        {id: 2, name: 'Beta'},
+        {id: 3, name: 'Zeus'},
+      ]);
+
+      controller = <%= array_controller_name %>.create();
+      controller.set('content', Test.store.findMany(<%= model_name %>, [1, 2, 3]));
+    })
+  });
+
+  it("displays items", function() {
+    assert.equal(controller.get('length'), 3);
+    assert.equal(controller.objectAt(0).get('id'), '3');
+    assert.equal(controller.objectAt(1).get('id'), '2');
+    assert.equal(controller.objectAt(2).get('id'), '1');
+  });
+});
