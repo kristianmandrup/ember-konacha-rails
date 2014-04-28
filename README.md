@@ -2,8 +2,6 @@
 
 Generators to help setup an [ember-rails](https://github.com/emberjs/ember-rails) app with [konacha](https://github.com/jfirebaugh/konacha) testing.
 
-PS: Still young and under development... Please help improve it :)
-
 ## What?
 
 This gem has the stated goal of making it _easy_ to setup a good testing infrastructure for testing your *Ember-Rails* apps.
@@ -36,7 +34,7 @@ You can find more generators/scaffolders as part of [ember-tools](https://github
 
 Add this line to your application's Gemfile:
 
-    gem 'ember-konacha-rails', github: 'kristianmandrup/ember-konacha-rails'
+    gem 'ember-konacha-rails'
 
 And then execute:
 
@@ -233,23 +231,26 @@ Read more on [http://sinonjs.org/] for mocking, stubbing and creating test spies
 
 A proposed [Ember App structure](https://github.com/kristianmandrup/ember-konacha-rails/EmberStructure.md) is included for reference.
 
-## Contributing
+### Ember::ResourceController
 
-Please help make it easier for developers tp get started using *Test Driven Development* (or BDD) for Ember with Rails.
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
-
-
-## Notes
-
-Sample JSON REST controller (User resource)
+An `Ember::ResourceController` module is now included, which contains utility methods for setting up the Controller actions to respond wth JSON resources. 
+To use it:
 
 ```ruby
-class UsersController < APIController
+require 'ember/resource_controller'
+
+class User
+  include Ember::ResourceController
+
+  # optional: overrides auto-detection via Controller name convention
+  resource :user
+end
+```
+
+Generates controller actions methods:
+
+```ruby
+class UsersController
   def index
     render_json users
   end
@@ -269,31 +270,16 @@ class UsersController < APIController
   def create    
     render_json user.save
   end
-
-  protected
-
-  def render_json data, opts = {}
-    render json: data, opts
-  end
-
-  def new_user
-    @new_user ||= User.new user_params
-  end
-
-  def users
-    User.all.to_a
-  end
-
-  def user
-    @user ||= User.find user_id
-  end
-
-  def user_id
-    params[:id]
-  end
-
-  def user_params
-    params[:user]
-  end  
-end
 ```
+
+## Contributing
+
+Please help make it easier for developers tp get started using *Test Driven Development* (or BDD) for Ember with Rails.
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+Note: This gem could really use some specs ;) Please help out!
